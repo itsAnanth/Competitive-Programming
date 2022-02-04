@@ -1,4 +1,7 @@
 // https://leetcode.com/problems/remove-element
+#include <vector>
+
+using namespace std;
 
 class Solution {
 public:

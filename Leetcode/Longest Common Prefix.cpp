@@ -1,4 +1,9 @@
 // https://leetcode.com/problems/longest-common-prefix
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
 
 #define FOR(i, a, b, s) for (int i=(a); (s)>0?i<(b):i>(b); i+=(s))
 
