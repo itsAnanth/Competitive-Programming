@@ -1,4 +1,7 @@
 // https://leetcode.com/problems/length-of-last-word
+#include <string>
+
+using namespace std;
 
 #define FOR(i, a, b, s) for (int i=(a); (s)>0?i<(b):i>(b); i+=(s))
 class Solution {
