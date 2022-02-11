@@ -1,3 +1,3 @@
 # Competitive-Programming
 
-my solutions :D
+my solutions for various interview questions
