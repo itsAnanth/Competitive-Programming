@@ -1,18 +1,5 @@
 #include <bits/stdc++.h>
 
-
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T> v) {
-    os << "[";
-    for (int i = 0; i < v.size(); i++) {
-        os << v[i];
-        (i != v.size() - 1) && (os << ", ");
-    }
-    os << "]\n";
-    return os;
-}
-
-
 template <typename T>
 void print(T arg) {
     std::cout << arg << std::endl;
@@ -31,12 +18,14 @@ class Node {
 class List {
     public:
     Node * head = NULL;
+    int size = 0;
     List() {};
     
     void push(int data) {
         Node * newnode = new Node(data);
         Node * _head = this->head;
         
+        size++;
         if (!_head) {
             this->head = newnode;
             return;
@@ -47,13 +36,27 @@ class List {
             
         _head->next = newnode;
     }
+    
+    Node* operator[](int i) {
+        int ptr = 0;
+        Node * element = this->head;
+        
+        if (i > this->size - 1) return element;
+        
+        while (ptr < i && element->next) {
+            element = element->next;
+            ptr++;
+        }
+
+        return element;
+    }
 };
 
 std::ostream& operator<<(std::ostream& os, const List v) {
     os << "[";
     Node * curr = v.head;
     if (!curr) {
-        os << "Empty List\n";
+        os << "Empty List";
     }
     
     while (curr) {
@@ -67,10 +70,11 @@ std::ostream& operator<<(std::ostream& os, const List v) {
 
 int main() {
     List list;
-    
     list.push(1);
     list.push(2);
+    list.push(10);
+    list.push(20);
     print(list);
-
+    
     return 0;
 }
