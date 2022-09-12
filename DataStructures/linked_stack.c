@@ -71,5 +71,6 @@ void push(Stack * s, int data) {
             curr = curr->next;
         }
         curr->next = n;
+        s->size++;
     }
 }
