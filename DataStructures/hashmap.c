@@ -23,6 +23,7 @@ typedef struct hashmap {
     bucket** buckets;
     int capacity;
     int size;
+    int bucketsSize;
 } hashmap;
 
 hashmap* hashmap_create(void);
@@ -96,12 +97,20 @@ bool checkEntries(bucket* entry, uint32_t hash, size_t ksize, void* key) {
 bool hashmap_set(hashmap* m, void* key, size_t ksize, uintptr_t value) {
     uint32_t hash = hash_data(key, ksize), index = hash % m->capacity;
     
+    if (m->size >= m->capacity) {
+        #ifdef _HASHMAP_RESIZE
+        realloc(m->buckets, m->capacity * 2);
+        m->capacity *= 2;
+        #endif
+    }
+    
     
     bucket * entry = m->buckets[index];
     bucket * newBucket = hashmap_create_bucket(key, ksize, value, hash);
     
     if (!entry) {
         m->buckets[index] = newBucket;
+        m->size++;
     } else {
         bucket * curr = entry;
         
@@ -112,6 +121,8 @@ bool hashmap_set(hashmap* m, void* key, size_t ksize, uintptr_t value) {
         curr->next = newBucket;
     }
     
+    m->bucketsSize++;
+    
     return true;
 }
 
@@ -120,6 +131,7 @@ hashmap* hashmap_create() {
     m->capacity = HASHMAP_DEFAULT_CAPACITY;
     m->size = 0;
     m->buckets = (bucket**)malloc(sizeof(bucket*) * m->capacity);
+    m->bucketsSize = 0;
     
     
     return m;
