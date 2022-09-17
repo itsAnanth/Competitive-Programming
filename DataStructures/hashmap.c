@@ -35,11 +35,13 @@ bucket * hashmap_get(hashmap*, void*, size_t);
 int main() {
     hashmap* m = hashmap_create();
     
-    hashmap_set(m, "test", 4, 400);
+
+    hashmap_set(m, "hellb", 5, 400);
+    hashmap_set(m, "hellB", 5, 500);    
+ 
+    bucket* val = hashmap_get(m, "hellb", 5), *val2 = hashmap_get(m, "hellB", 5);
     
-    bucket* val = hashmap_get(m, "test", 4);
-    
-    if (val) printf("\n%d", val->value);
+    printf("%ld", val2->value);
     
 
     return 0;
@@ -69,11 +71,12 @@ bucket * hashmap_get(hashmap* m, void* key, size_t ksize) {
     } else if (entry->next) {
         bucket* curr = entry->next;
         
-        while (curr->next) {
+        while (curr) {
             if (checkEntries(curr, hash, ksize, key)) {
                 rt = curr;
                 break;
             }
+            curr = curr->next;
         }
     }
     
@@ -93,7 +96,6 @@ bool checkEntries(bucket* entry, uint32_t hash, size_t ksize, void* key) {
 bool hashmap_set(hashmap* m, void* key, size_t ksize, uintptr_t value) {
     uint32_t hash = hash_data(key, ksize), index = hash % m->capacity;
     
-    printf("%lu", index);
     
     bucket * entry = m->buckets[index];
     bucket * newBucket = hashmap_create_bucket(key, ksize, value, hash);
