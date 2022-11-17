@@ -11,8 +11,15 @@ typedef struct node Node;
 Node * createNode(int);
 void insertNodeLast(Node**, int);
 void print(Node*);
+void traverse(Node**, void(*fn)(Node*, int));
+int deleteNode(Node**, int);
 int insertNodeBefore(Node**, int, int);
 int insertNodeAfter(Node**, int, int);
+int search(Node*, int);
+
+void logc(Node* head, int data) {
+    printf("%d ", data);
+}
 
 int main() {
     
@@ -33,7 +40,12 @@ int main() {
     print(head);
     insertNodeBefore(&head, 5, 50);
     insertNodeAfter(&head, 50, 100);
-    print(head);
+    
+    deleteNode(&head, 100);
+
+    
+    traverse(&head, *logc);
+    
 
     return 0;
 }
@@ -47,6 +59,28 @@ void print(Node * head) {
     printf("%d\n", ptr->data);
 }
 
+int deleteNode(Node ** head, int data) {
+    Node * prev = NULL;
+    Node * curr = *head;
+    
+    if (curr->data == data) {
+        *head = curr->next ? curr->next : NULL;
+        return 1;
+    }
+    
+    while (curr) {
+        if (curr->data == data) {
+            prev->next = curr->next;
+            return 1;
+        }
+        
+        prev = curr;
+        curr = curr->next;
+    }
+    
+    return -1;
+}
+
 void insertNodeLast(Node ** head, int data) {
     Node * newnode = createNode(data);
     if (!*head) {
@@ -58,6 +92,15 @@ void insertNodeLast(Node ** head, int data) {
         }
         
         ptr->next = newnode;
+    }
+}
+
+void traverse(Node** head, void(*fn)(Node*, int)) {
+    Node * curr = *head;
+    
+    while (curr) {
+        fn(curr, curr->data);
+        curr = curr->next;
     }
 }
 
@@ -100,6 +143,20 @@ int insertNodeAfter(Node ** head, int target, int data) {
     }
     
     return 0;
+}
+
+int search(Node * head, int data) {
+    if (!head) return -1;
+    
+    Node * curr = head;
+    int i = 0;
+    while (curr) {
+        if (curr->data == data) return i;
+        i++;
+        curr = curr->next;
+    }
+    
+    return -1;
 }
 
 Node * createNode(int data) {
